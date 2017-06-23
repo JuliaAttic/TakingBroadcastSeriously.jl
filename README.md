@@ -1,7 +1,8 @@
 # TakingBroadcastSeriously
 
-[![Build Status](https://travis-ci.org/MikeInnes/TakingBroadcastSeriously.jl.svg?branch=master)](https://travis-ci.org/MikeInnes/TakingBroadcastSeriously.jl)
+This package implements a hack around broadcast fusion for custom array types. See [the tests](test/runtests.jl) for example usage. You need to:
 
-[![Coverage Status](https://coveralls.io/repos/MikeInnes/TakingBroadcastSeriously.jl/badge.svg?branch=master&service=github)](https://coveralls.io/github/MikeInnes/TakingBroadcastSeriously.jl?branch=master)
-
-[![codecov.io](http://codecov.io/github/MikeInnes/TakingBroadcastSeriously.jl/coverage.svg?branch=master)](http://codecov.io/github/MikeInnes/TakingBroadcastSeriously.jl?branch=master)
+1. Call `unfuse(ArrayType)` to intercept broadcast calls.
+2. Make sure any function you want to use inside broadcast is on the list [here](src/TakingBroadcastSeriously.jl).
+3. Overload `broadcast_(f, xs...)` for your array type.
+4. Cross your fingers and hope this holds up for the next six months.
