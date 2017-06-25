@@ -1,4 +1,4 @@
-import TakingBroadcastSeriously: unfuse, broadcast_
+import TakingBroadcastSeriously: @unfuse, broadcast_
 using Base.Test
 
 # A fake custom array type
@@ -12,7 +12,7 @@ Base.getindex(xs::FooArray, a...) = getindex(xs.data, a...)
 
 # Unfuse stuff
 
-unfuse(FooArray)
+@unfuse FooArray
 
 blist = []
 

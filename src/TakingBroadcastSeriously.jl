@@ -15,8 +15,9 @@ for f in :[sin, cos, +, -, *, /].args
   @eval Base.$f(a::Broadcasted...) = Broadcasted(broadcast_($f, unwrap.(a)...))
 end
 
-function unfuse(T)
-  @eval begin
+macro unfuse(T)
+  T = esc(T)
+  quote
     Base.broadcast(f, A::$T, Bs...) = f(Broadcasted(A), Broadcasted.(Bs)...) |> unwrap
     Base.broadcast(f, A, B::$T, Cs...) = f(Broadcasted(A), Broadcasted(B), Broadcasted.(Cs)...) |> unwrap
   end
