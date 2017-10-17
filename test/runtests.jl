@@ -36,5 +36,5 @@ end
 
     @test xs.^3.0 == xs′.^3.0
     @test 50 .* xs == 50 .* xs′
-
+    @test xs.^3 == xs′.^3
 end
