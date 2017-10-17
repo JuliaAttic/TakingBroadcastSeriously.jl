@@ -29,6 +29,8 @@ end
 xs = rand(5)
 xs′ = FooArray(xs)
 
-cos.(sin.(xs)) == cos.(sin.(xs′))
+@test cos.(sin.(xs)) == cos.(sin.(xs′))
 
 @test blist == [sin, cos]
+
+@test xs.^3.0 == xs′.^3.0
