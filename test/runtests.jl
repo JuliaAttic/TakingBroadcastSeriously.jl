@@ -26,9 +26,15 @@ function broadcast_(::typeof(cos), xs::FooArray)
   FooArray(cos.(xs.data))
 end
 
-xs = rand(5)
-xs′ = FooArray(xs)
+@testset "Seriously" begin
+    xs = rand(5)
+    xs′ = FooArray(xs)
 
-cos.(sin.(xs)) == cos.(sin.(xs′))
+    @test cos.(sin.(xs)) == cos.(sin.(xs′))
 
-@test blist == [sin, cos]
+    @test blist == [sin, cos]
+
+    @test xs.^3.0 == xs′.^3.0
+    @test 50 .* xs == 50 .* xs′
+    @test xs.^3 == xs′.^3
+end

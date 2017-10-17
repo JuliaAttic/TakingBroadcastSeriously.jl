@@ -1,5 +1,5 @@
 module TakingBroadcastSeriously
-
+import Base: ^
 using Base.Broadcast: broadcast_c, containertype
 
 broadcast_(f, A, Bs...) = broadcast_c(f, containertype(A, Bs...), A, Bs...)
@@ -11,9 +11,16 @@ end
 unwrap(w::Broadcasted) = w.x
 
 # We must hack each function we want to use with un-fused broadcasting.
-for f in :[sin, cos, +, -, *, /, ^].args
+for f in :[sin, cos, +, -, *, /, ^, <, <=, >, >=, !=, ==].args
   @eval Base.$f(a::Broadcasted...) = Broadcasted(broadcast_($f, unwrap.(a)...))
+
+  #sometimes literals "resist" wrapping, so catch them too
+  @eval Base.$f(a::Broadcasted, b) = Broadcasted(broadcast_($f, unwrap(a), b))
+  @eval Base.$f(b, a::Broadcasted) = Broadcasted(broadcast_($f, b, unwrap(a)))
 end
+
+#Avoid ambiguitity with Base
+^(a::Broadcasted, b::Integer) = Broadcasted(broadcast_(^, unwrap(a), b))
 
 macro unfuse(T)
   T = esc(T)
