@@ -16,6 +16,7 @@ for f in :[sin, cos, +, -, *, /, ^].args
 
   #sometimes literals "resist" wrapping, so catch them too
   @eval Base.$f(a::Broadcasted, b) = Broadcasted(broadcast_($f, unwrap(a), b))
+  @eval Base.$f(b, a::Broadcasted) = Broadcasted(broadcast_($f, b, unwrap(a)))
 end
 
 macro unfuse(T)
